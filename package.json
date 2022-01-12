@@ -1,0 +1,19 @@
+{
+  "name": "pokemon-team-builder-backend",
+  "version": "0.0.1",
+  "description": "Backend for Pokemon Team Builder app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node_modules/.bin/nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antti Alestalo",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
