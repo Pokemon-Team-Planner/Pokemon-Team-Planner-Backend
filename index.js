@@ -4,10 +4,7 @@ const app = express()
 const cors = require('cors')
 app.use(cors())
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
-})
-
+app.use(express.static('build'))
 app.use(express.static('public'))
 
 const PORT = process.env.PORT || 3001
