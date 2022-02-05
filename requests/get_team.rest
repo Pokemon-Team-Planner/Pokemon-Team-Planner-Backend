@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/teams/61fe992fdf6cd1505f342d77

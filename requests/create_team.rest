@@ -1,0 +1,14 @@
+POST http://localhost:3001/api/teams
+Content-Type: application/json
+
+{
+  "gameVersionPokedex": "pokedex-firered.json",
+  "team": [
+    { "pokemonID": 6 },
+    { "pokemonID": 53 },
+    { "pokemonID": 24 },
+    { "pokemonID": 87 },
+    { "pokemonID": 98 },
+    { "pokemonID": 134 }
+  ]
+}
