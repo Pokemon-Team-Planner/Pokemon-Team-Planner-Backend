@@ -16,10 +16,15 @@ app.get('/api/teams', (request, response) => {
   })
 })
 
-app.get('/api/teams/:id', (request, response) => {
+app.get('/api/teams/:id', (request, response, next) => {
   Team.findById(request.params.id).then(team => {
-    response.json(team)
+    if (team) {
+      response.json(team)
+    } else {
+      response.status(404).end()
+    }
   })
+  .catch(error => next(error))
 })
 
 app.post('/api/teams', (request, response) => {
@@ -43,6 +48,24 @@ app.post('/api/teams', (request, response) => {
     response.json(savedTeam)
   })
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
