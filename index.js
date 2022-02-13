@@ -27,6 +27,14 @@ app.get('/api/teams/:id', (request, response, next) => {
   .catch(error => next(error))
 })
 
+app.delete('/api/teams/:id', (request, response, next) => {
+  Team.findByIdAndDelete(request.params.id)
+    .then( () => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
 app.post('/api/teams', (request, response) => {
   const body = request.body
   console.log(request)
