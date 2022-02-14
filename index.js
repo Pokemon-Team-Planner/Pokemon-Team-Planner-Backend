@@ -35,6 +35,24 @@ app.delete('/api/teams/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.put('/api/teams/:id', (request, response, next) => {
+  const body = request.body
+
+  const team = {
+    team: body.team
+  }
+
+  Team.findByIdAndUpdate(request.params.id, team, {new: true})
+    .then(updateTeam => {
+      if (updateTeam) {
+        response.json(updateTeam)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+})
+
 app.post('/api/teams', (request, response) => {
   const body = request.body
   console.log(request)
