@@ -59,7 +59,6 @@ app.put('/api/teams/:id', (request, response, next) => {
 
 app.post('/api/teams', (request, response) => {
   const body = request.body
-  console.log(request)
 
   if (body.gameVersionPokedex === undefined) {
     return response.status(400).json({ error: 'gameVersionPokedex missing' })
