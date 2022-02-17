@@ -12,9 +12,26 @@ mongoose.connect(url)
   })
 
 const teamSchema = new mongoose.Schema({
-  gameVersionPokedex: String,
-  date: Date,
-  team: [{ pokemonID: Number }]
+  gameVersionPokedex: {
+    type: String,
+    required: [true, "gameVersionPokedex is required"]
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  team: {
+    type: [
+            {
+              pokemonID: { type: Number, required: [true, "pokemonID is required"] }
+            }
+          ],
+    validate: [
+                { validator: (arr) => arr.length >= 1, msg: 'One object is minimum' },
+                { validator: (arr) => arr.length <= 6, msg: 'Six objects is maximum' }
+              ],
+    required: [true, "team is required"]
+  }
 })
 
 teamSchema.set('toJSON', {

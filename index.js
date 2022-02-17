@@ -57,15 +57,8 @@ app.put('/api/teams/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.post('/api/teams', (request, response) => {
+app.post('/api/teams', (request, response, next) => {
   const body = request.body
-
-  if (body.gameVersionPokedex === undefined) {
-    return response.status(400).json({ error: 'gameVersionPokedex missing' })
-  }
-  if (body.team === undefined) {
-    return response.status(400).json({ error: 'team missing' })
-  }
 
   const team = new Team({
     gameVersionPokedex: body.gameVersionPokedex,
@@ -76,6 +69,7 @@ app.post('/api/teams', (request, response) => {
   team.save().then(savedTeam => {
     response.json(savedTeam)
   })
+  .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -89,6 +83,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
