@@ -21,14 +21,15 @@ app.get('/api/teams', (request, response) => {
 })
 
 app.get('/api/teams/:id', (request, response, next) => {
-  Team.findById(request.params.id).then(team => {
-    if (team) {
-      response.json(team)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+  Team.findById(request.params.id)
+    .then(team => {
+      if (team) {
+        response.json(team)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/teams/:id', (request, response, next) => {
@@ -66,10 +67,11 @@ app.post('/api/teams', (request, response, next) => {
     team: body.team
   })
 
-  team.save().then(savedTeam => {
-    response.json(savedTeam)
-  })
-  .catch(error => next(error))
+  team.save()
+    .then(savedTeam => {
+      response.json(savedTeam)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {

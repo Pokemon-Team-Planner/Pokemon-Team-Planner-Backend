@@ -4,7 +4,7 @@ const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -14,7 +14,7 @@ mongoose.connect(url)
 const teamSchema = new mongoose.Schema({
   gameVersionPokedex: {
     type: String,
-    required: [true, "gameVersionPokedex is required"]
+    required: [true, 'gameVersionPokedex is required']
   },
   date: {
     type: Date,
@@ -22,15 +22,15 @@ const teamSchema = new mongoose.Schema({
   },
   team: {
     type: [
-            {
-              pokemonID: { type: Number, required: [true, "pokemonID is required"] }
-            }
-          ],
+      {
+        pokemonID: { type: Number, required: [true, 'pokemonID is required'] }
+      }
+    ],
     validate: [
-                { validator: (arr) => arr.length >= 1, msg: 'One object is minimum' },
-                { validator: (arr) => arr.length <= 6, msg: 'Six objects is maximum' }
-              ],
-    required: [true, "team is required"]
+      { validator: (arr) => arr.length >= 1, msg: 'One object is minimum' },
+      { validator: (arr) => arr.length <= 6, msg: 'Six objects is maximum' }
+    ],
+    required: [true, 'team is required']
   }
 })
 
