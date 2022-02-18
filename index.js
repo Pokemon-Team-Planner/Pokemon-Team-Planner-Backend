@@ -46,7 +46,7 @@ app.put('/api/teams/:id', (request, response, next) => {
     team: body.team
   }
 
-  Team.findByIdAndUpdate(request.params.id, team, {new: true})
+  Team.findByIdAndUpdate(request.params.id, team, { new: true, runValidators: true, context: 'query' })
     .then(updateTeam => {
       if (updateTeam) {
         response.json(updateTeam)
