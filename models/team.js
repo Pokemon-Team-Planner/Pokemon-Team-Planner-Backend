@@ -1,17 +1,4 @@
 const mongoose = require('mongoose')
-const config = require('../utils/config')
-const logger = require('../utils/logger')
-
-const url = config.MONGODB_URI
-
-logger.info('connecting to', url)
-mongoose.connect(url)
-  .then(() => {
-    logger.info('connected to MongoDB')
-  })
-  .catch(error => {
-    logger.error('error connecting to MongoDB', error.message)
-  })
 
 const teamSchema = new mongoose.Schema({
   gameVersionPokedex: {
