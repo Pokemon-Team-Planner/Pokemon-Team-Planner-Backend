@@ -1,10 +1,9 @@
 const teamsRouter = require('express').Router()
 const Team = require('../models/team')
 
-teamsRouter.get('/', (request, response) => {
-  Team.find({}).then(teams => {
-    response.json(teams)
-  })
+teamsRouter.get('/', async (request, response) => {
+  const teams = await Team.find({})
+  response.json(teams)
 })
 
 teamsRouter.get('/:id', (request, response, next) => {
@@ -56,7 +55,7 @@ teamsRouter.post('/', (request, response, next) => {
 
   team.save()
     .then(savedTeam => {
-      response.json(savedTeam)
+      response.status(201).json(savedTeam)
     })
     .catch(error => next(error))
 })

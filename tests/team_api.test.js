@@ -62,6 +62,78 @@ test('a specific team is within the returned teams', async () => {
   )
 })
 
+test('a valid team can be added ', async () => {
+  const newTeam = {
+    gameVersionPokedex: 'pokedex-firered.json',
+    date: new Date(),
+    team: [
+      { pokemonID: 1 },
+      { pokemonID: 2 },
+      { pokemonID: 3 },
+      { pokemonID: 4 },
+      { pokemonID: 5 },
+      { pokemonID: 6 }
+    ]
+  }
+
+  await api
+    .post('/api/teams')
+    .send(newTeam)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/teams')
+
+  const contents = response.body.map(r => r.team)
+
+  expect(response.body).toHaveLength(initialTeams.length + 1)
+  expect(contents).toContainEqual(
+    newTeam.team
+  )
+})
+
+test('team without pokemon is not added', async () => {
+  const newTeam = {
+    gameVersionPokedex: 'pokedex-firered.json',
+    date: new Date(),
+    team: []
+  }
+
+  await api
+    .post('/api/teams')
+    .send(newTeam)
+    .expect(400)
+
+  const response = await api.get('/api/teams')
+
+  expect(response.body).toHaveLength(initialTeams.length)
+})
+
+test('team with more than 6 pokemon is not added', async () => {
+  const newTeam = {
+    gameVersionPokedex: 'pokedex-firered.json',
+    date: new Date(),
+    team: [
+      { pokemonID: 1 },
+      { pokemonID: 2 },
+      { pokemonID: 3 },
+      { pokemonID: 4 },
+      { pokemonID: 5 },
+      { pokemonID: 6 },
+      { pokemonID: 7 }
+    ]
+  }
+
+  await api
+    .post('/api/teams')
+    .send(newTeam)
+    .expect(400)
+
+  const response = await api.get('/api/teams')
+
+  expect(response.body).toHaveLength(initialTeams.length)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
