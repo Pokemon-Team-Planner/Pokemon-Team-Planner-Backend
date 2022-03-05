@@ -1,41 +1,15 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Team = require('../models/team')
 
-const initialTeams = [
-  {
-    gameVersionPokedex: 'pokedex-firered.json',
-    date: new Date(),
-    team: [
-      { pokemonID: 6 },
-      { pokemonID: 53 },
-      { pokemonID: 24 },
-      { pokemonID: 87 },
-      { pokemonID: 98 },
-      { pokemonID: 134 }
-    ]
-  },
-  {
-    gameVersionPokedex: 'pokedex-firered.json',
-    date: new Date(),
-    team: [
-      { pokemonID: 9 },
-      { pokemonID: 33 },
-      { pokemonID: 45 },
-      { pokemonID: 65 },
-      { pokemonID: 78 },
-      { pokemonID: 120 }
-    ]
-  }
-]
-
 beforeEach(async () => {
   await Team.deleteMany({})
-  let teamObject = new Team(initialTeams[0])
+  let teamObject = new Team(helper.initialTeams[0])
   await teamObject.save()
-  teamObject = new Team(initialTeams[1])
+  teamObject = new Team(helper.initialTeams[1])
   await teamObject.save()
 })
 
@@ -49,16 +23,16 @@ test('teams are returned as json', async () => {
 test('all teams are returned', async () => {
   const response = await api.get('/api/teams')
 
-  expect(response.body).toHaveLength(initialTeams.length)
+  expect(response.body).toHaveLength(helper.initialTeams.length)
 })
 
 test('a specific team is within the returned teams', async () => {
   const response = await api.get('/api/teams')
 
-  const contents = response.body.map(r => r.team)
+  const contents = response.body.map(item => item.team)
 
   expect(contents).toContainEqual(
-    initialTeams[0].team
+    helper.initialTeams[0].team
   )
 })
 
@@ -82,12 +56,12 @@ test('a valid team can be added ', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/teams')
+  const teamsAtEnd = await helper.teamsInDb()
 
-  const contents = response.body.map(r => r.team)
+  const teams = teamsAtEnd.map(item => item.team)
 
-  expect(response.body).toHaveLength(initialTeams.length + 1)
-  expect(contents).toContainEqual(
+  expect(teamsAtEnd).toHaveLength(helper.initialTeams.length + 1)
+  expect(teams).toContainEqual(
     newTeam.team
   )
 })
@@ -106,7 +80,7 @@ test('team without pokemon is not added', async () => {
 
   const response = await api.get('/api/teams')
 
-  expect(response.body).toHaveLength(initialTeams.length)
+  expect(response.body).toHaveLength(helper.initialTeams.length)
 })
 
 test('team with more than 6 pokemon is not added', async () => {
@@ -131,7 +105,7 @@ test('team with more than 6 pokemon is not added', async () => {
 
   const response = await api.get('/api/teams')
 
-  expect(response.body).toHaveLength(initialTeams.length)
+  expect(response.body).toHaveLength(helper.initialTeams.length)
 })
 
 afterAll(() => {
