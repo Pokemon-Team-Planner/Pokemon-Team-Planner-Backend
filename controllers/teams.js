@@ -44,7 +44,7 @@ teamsRouter.put('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-teamsRouter.post('/', (request, response, next) => {
+teamsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const team = new Team({
@@ -53,11 +53,12 @@ teamsRouter.post('/', (request, response, next) => {
     team: body.team
   })
 
-  team.save()
-    .then(savedTeam => {
-      response.status(201).json(savedTeam)
-    })
-    .catch(error => next(error))
+  try {
+    const savedTeam = await team.save()
+    response.status(201).json(savedTeam)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 module.exports = teamsRouter
