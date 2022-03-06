@@ -2,6 +2,7 @@ const logger = require('./utils/logger')
 const config = require('./utils/config')
 const mongoose = require('mongoose')
 const express = require('express')
+require('express-async-errors') // eliminates the need for try-catch and next(exception) in controllers
 const app = express()
 const cors = require('cors')
 const teamsRouter = require('./controllers/teams')

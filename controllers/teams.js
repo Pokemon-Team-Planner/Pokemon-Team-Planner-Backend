@@ -6,26 +6,18 @@ teamsRouter.get('/', async (request, response) => {
   response.json(teams)
 })
 
-teamsRouter.get('/:id', async (request, response, next) => {
-  try {
-    const team = await Team.findById(request.params.id)
-    if (team) {
-      response.json(team)
-    } else {
-      response.status(404).end()
-    }
-  } catch(exception) {
-    next(exception)
+teamsRouter.get('/:id', async (request, response) => {
+  const team = await Team.findById(request.params.id)
+  if (team) {
+    response.json(team)
+  } else {
+    response.status(404).end()
   }
 })
 
-teamsRouter.delete('/:id', async (request, response, next) => {
-  try {
-    await Team.findByIdAndDelete(request.params.id)
-    response.status(204).end()
-  } catch(exception) {
-    next(exception)
-  }
+teamsRouter.delete('/:id', async (request, response) => {
+  await Team.findByIdAndDelete(request.params.id)
+  response.status(204).end()
 })
 
 teamsRouter.put('/:id', (request, response, next) => {
@@ -46,7 +38,7 @@ teamsRouter.put('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-teamsRouter.post('/', async (request, response, next) => {
+teamsRouter.post('/', async (request, response) => {
   const body = request.body
 
   const team = new Team({
@@ -55,12 +47,8 @@ teamsRouter.post('/', async (request, response, next) => {
     team: body.team
   })
 
-  try {
-    const savedTeam = await team.save()
-    response.status(201).json(savedTeam)
-  } catch(exception) {
-    next(exception)
-  }
+  const savedTeam = await team.save()
+  response.status(201).json(savedTeam)
 })
 
 module.exports = teamsRouter
