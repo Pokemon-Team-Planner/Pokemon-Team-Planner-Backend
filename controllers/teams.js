@@ -6,24 +6,26 @@ teamsRouter.get('/', async (request, response) => {
   response.json(teams)
 })
 
-teamsRouter.get('/:id', (request, response, next) => {
-  Team.findById(request.params.id)
-    .then(team => {
-      if (team) {
-        response.json(team)
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+teamsRouter.get('/:id', async (request, response, next) => {
+  try {
+    const team = await Team.findById(request.params.id)
+    if (team) {
+      response.json(team)
+    } else {
+      response.status(404).end()
+    }
+  } catch(exception) {
+    next(exception)
+  }
 })
 
-teamsRouter.delete('/:id', (request, response, next) => {
-  Team.findByIdAndDelete(request.params.id)
-    .then( () => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+teamsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Team.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 teamsRouter.put('/:id', (request, response, next) => {

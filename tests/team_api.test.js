@@ -108,6 +108,40 @@ test('team with more than 6 pokemon is not added', async () => {
   expect(response.body).toHaveLength(helper.initialTeams.length)
 })
 
+test('a specific team can be viewed', async () => {
+  const teamsAtStart = await helper.teamsInDb()
+
+  const teamToView = teamsAtStart[0]
+
+  const resultTeam = await api
+    .get(`/api/teams/${teamToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const processedTeamToView = JSON.parse(JSON.stringify(teamToView)) //tranforms date-object to string
+
+  expect(resultTeam.body).toEqual(processedTeamToView)
+})
+
+test('a team can be deleted', async () => {
+  const teamsAtStart = await helper.teamsInDb()
+  const teamToDelete = teamsAtStart[0]
+
+  await api
+    .delete(`/api/teams/${teamToDelete.id}`)
+    .expect(204)
+
+  const teamsAtEnd = await helper.teamsInDb()
+
+  expect(teamsAtEnd).toHaveLength(
+    helper.initialTeams.length - 1
+  )
+
+  const contents = teamsAtEnd.map(item => item.team)
+
+  expect(contents).not.toContainEqual(teamToDelete.team)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
