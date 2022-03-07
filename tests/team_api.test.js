@@ -7,10 +7,10 @@ const Team = require('../models/team')
 
 beforeEach(async () => {
   await Team.deleteMany({})
-  let teamObject = new Team(helper.initialTeams[0])
-  await teamObject.save()
-  teamObject = new Team(helper.initialTeams[1])
-  await teamObject.save()
+
+  const teamObjects = helper.initialTeams.map(team => new Team(team))
+  const promiseArray = teamObjects.map(teamObject => teamObject.save())
+  await Promise.all(promiseArray)
 })
 
 test('teams are returned as json', async () => {
