@@ -137,9 +137,39 @@ test('a team can be deleted', async () => {
     helper.initialTeams.length - 1
   )
 
-  const contents = teamsAtEnd.map(item => item.team)
+  const teams = teamsAtEnd.map(item => item.team)
 
-  expect(contents).not.toContainEqual(teamToDelete.team)
+  expect(teams).not.toContainEqual(teamToDelete.team)
+})
+
+test('a team can be updated', async () => {
+  const teamsAtStart = await helper.teamsInDb()
+  const teamToUpdate = teamsAtStart[0]
+  const updatedTeam = {
+    team: [
+      { pokemonID: 9 },
+      { pokemonID: 9 },
+      { pokemonID: 9 },
+      { pokemonID: 9 },
+      { pokemonID: 9 },
+      { pokemonID: 9 }
+    ]
+  }
+
+  await api
+    .put(`/api/teams/${teamToUpdate.id}`)
+    .send(updatedTeam)
+    .expect(200)
+
+  const teamsAtEnd = await helper.teamsInDb()
+
+  expect(teamsAtEnd).toHaveLength(
+    helper.initialTeams.length
+  )
+
+  const teams = teamsAtEnd.map(item => item.team)
+
+  expect(teams).toContainEqual(updatedTeam.team)
 })
 
 afterAll(() => {

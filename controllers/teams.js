@@ -20,22 +20,19 @@ teamsRouter.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-teamsRouter.put('/:id', (request, response, next) => {
+teamsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
   const team = {
     team: body.team
   }
 
-  Team.findByIdAndUpdate(request.params.id, team, { new: true, runValidators: true, context: 'query' })
-    .then(updateTeam => {
-      if (updateTeam) {
-        response.json(updateTeam)
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+  const updatedTeam = await Team.findByIdAndUpdate(request.params.id, team, { new: true, runValidators: true, context: 'query' })
+  if (updatedTeam) {
+    response.json(updatedTeam)
+  } else {
+    response.status(404).end()
+  }
 })
 
 teamsRouter.post('/', async (request, response) => {
