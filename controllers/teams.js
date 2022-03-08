@@ -23,11 +23,15 @@ teamsRouter.delete('/:id', async (request, response) => {
 teamsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
-  const team = {
-    team: body.team
+  // Using findById and save to update instead of findByIdAndUpdate
+  // to have proper status codes for failed updates
+  const teamToUpdate = await Team.findById(request.params.id)
+  if (!teamToUpdate) {
+    response.status(404).end()
   }
+  teamToUpdate.team = body.team
+  const updatedTeam = await teamToUpdate.save()
 
-  const updatedTeam = await Team.findByIdAndUpdate(request.params.id, team, { new: true, runValidators: true, context: 'query' })
   if (updatedTeam) {
     response.json(updatedTeam)
   } else {

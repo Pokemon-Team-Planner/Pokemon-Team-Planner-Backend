@@ -176,6 +176,31 @@ describe('when there are initially some teams saved', () => {
   
       expect(teams).toContainEqual(updatedTeam.team)
     })
+
+    test('fails with status code 400 if invalid id', async () => {
+      const invalidId = '32423fdsf34424'
+      const updatedTeam = {
+        team: [
+          { pokemonID: 9 }
+        ]
+      }
+  
+      await api
+        .put(`/api/teams/${invalidId}`)
+        .send(updatedTeam)
+        .expect(400)
+    })
+
+    test('fails with status code 400 if team missing', async () => {
+      const teamsAtStart = await helper.teamsInDb()
+      const teamToUpdate = teamsAtStart[0]
+      const updatedTeam = {}
+  
+      await api
+        .put(`/api/teams/${teamToUpdate.id}`)
+        .send(updatedTeam)
+        .expect(400)
+    })
   })
 })
 
