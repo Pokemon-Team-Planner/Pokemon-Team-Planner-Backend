@@ -123,6 +123,20 @@ describe('when there are initially some teams saved', () => {
   
       expect(resultTeam.body).toEqual(processedTeamToView)
     })
+
+    test('fails with status code 404 if id is non-existing', async () => {
+      const nonExistingId = await helper.nonExistingId()
+      await api
+        .get(`/api/teams/${nonExistingId}`)
+        .expect(404)
+    })
+
+    test('fails with status code 400 if invalid id', async () => {
+      const invalidId = 'abcd1234'
+      await api
+        .get(`/api/teams/${invalidId}`)
+        .expect(400)
+    })
   })
   
   describe('deleting a team', () => {
@@ -143,6 +157,20 @@ describe('when there are initially some teams saved', () => {
       const teams = teamsAtEnd.map(item => item.team)
   
       expect(teams).not.toContainEqual(teamToDelete.team)
+    })
+
+    test('fails with status code 204 if id is non-existing', async () => {
+      const nonExistingId = await helper.nonExistingId()
+      await api
+        .delete(`/api/teams/${nonExistingId}`)
+        .expect(204)
+    })
+
+    test('fails with status code 400 if invalid id', async () => {
+      const invalidId = 'abcd1234'
+      await api
+        .delete(`/api/teams/${invalidId}`)
+        .expect(400)
     })
   })
 
@@ -200,6 +228,19 @@ describe('when there are initially some teams saved', () => {
         .put(`/api/teams/${teamToUpdate.id}`)
         .send(updatedTeam)
         .expect(400)
+    })
+
+    test('fails with status code 404 if id is non-existing', async () => {
+      const nonExistingId = await helper.nonExistingId()
+      const updatedTeam = {
+        team: [
+          { pokemonID: 9 }
+        ]
+      }
+      await api
+        .put(`/api/teams/${nonExistingId}`)
+        .send(updatedTeam)
+        .expect(404)
     })
   })
 })
