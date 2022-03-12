@@ -1,4 +1,5 @@
 const Team = require('../models/team')
+const User = require('../models/user')
 
 const initialTeams = [
   {
@@ -44,6 +45,11 @@ const teamsInDb = async () => {
   return teams.map(team => team.toJSON())
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
 module.exports = {
-  initialTeams, nonExistingId, teamsInDb
+  initialTeams, nonExistingId, teamsInDb, usersInDb
 }

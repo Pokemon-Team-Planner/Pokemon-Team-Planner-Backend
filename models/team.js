@@ -20,6 +20,10 @@ const teamSchema = new mongoose.Schema({
       { validator: (arr) => arr.length <= 6, msg: 'Six objects is maximum' }
     ],
     required: [true, 'team is required']
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 
