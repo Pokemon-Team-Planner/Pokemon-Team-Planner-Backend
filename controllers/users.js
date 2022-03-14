@@ -12,6 +12,13 @@ usersRouter.post('/', async (request, response) => {
     })
   }
 
+  //restrict short usernames only at api level to reserve short ones for devs
+  if (username.length < 6) {
+    return response.status(400).json({
+      error: 'username must be 6 characters at minimum'
+    })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
