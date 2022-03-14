@@ -23,7 +23,7 @@ describe('when there is initially one user at db', () => {
       const newUser = {
         username: 'alestan',
         name: 'AnttiA',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       await api
@@ -45,7 +45,7 @@ describe('when there is initially one user at db', () => {
       const newUser = {
         username: '_Antti.123_',
         name: 'AnttiA',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       await api
@@ -69,7 +69,7 @@ describe('when there is initially one user at db', () => {
       const newUser = {
         username: 'root',
         name: 'Superuser',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       const result = await api
@@ -84,13 +84,13 @@ describe('when there is initially one user at db', () => {
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
 
-    test('username is shorter than 6 chars', async () => {
+    test('username is shorter than 6 characters', async () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
         username: 'admin',
         name: 'Admin',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       const result = await api
@@ -105,13 +105,13 @@ describe('when there is initially one user at db', () => {
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
 
-    test('username is longer than 20 chars', async () => {
+    test('username is longer than 20 characters', async () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
         username: 'adminadminadminadmin1',
         name: 'Admin',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       const result = await api
@@ -132,7 +132,7 @@ describe('when there is initially one user at db', () => {
       const newUser = {
         username: '!?/&%¤#"!#¤/)=',
         name: 'Admin',
-        password: 'salainen',
+        password: 'salainenon',
       }
 
       const result = await api
@@ -142,6 +142,27 @@ describe('when there is initially one user at db', () => {
         .expect('Content-Type', /application\/json/)
 
       expect(result.body.error).toContain('username must contain only letters, numbers, _ and .')
+
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    test('password is shorter than 10 characters', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+        username: 'admin1',
+        name: 'Admin',
+        password: 'salainen',
+      }
+
+      const result = await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+      expect(result.body.error).toContain('password must be 10 characters at minimum')
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
