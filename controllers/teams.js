@@ -1,5 +1,6 @@
 const teamsRouter = require('express').Router()
 const Team = require('../models/team')
+const User = require('../models/user')
 
 teamsRouter.get('/', async (request, response) => {
   const teams = await Team.find({})
@@ -42,13 +43,24 @@ teamsRouter.put('/:id', async (request, response) => {
 teamsRouter.post('/', async (request, response) => {
   const body = request.body
 
+  if (!body.userId) {
+    return response.status(400).json({
+      error: 'userId is missing'
+    })
+  }
+  const user = await User.findById(body.userId)
+
   const team = new Team({
     gameVersionPokedex: body.gameVersionPokedex,
     date: new Date(),
-    team: body.team
+    team: body.team,
+    user: user._id
   })
 
   const savedTeam = await team.save()
+  user.teams = user.teams.concat(savedTeam._id)
+  await user.save()
+  
   response.status(201).json(savedTeam)
 })
 

@@ -10,5 +10,6 @@ Content-Type: application/json
     { "pokemonID": 87 },
     { "pokemonID": 98 },
     { "pokemonID": 134 }
-  ]
+  ],
+  "userId": "622f47e2fdaaa568c7516a37"
 }
