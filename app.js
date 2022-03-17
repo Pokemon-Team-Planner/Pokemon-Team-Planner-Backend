@@ -5,6 +5,7 @@ const express = require('express')
 require('express-async-errors') // eliminates the need for try-catch and next(exception) in controllers
 const app = express()
 const cors = require('cors')
+const loginRouter = require('./controllers/login')
 const teamsRouter = require('./controllers/teams')
 const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
@@ -25,6 +26,7 @@ app.use(express.static('build'))
 app.use(express.static('public'))
 app.use(middleware.requestLogger)
 
+app.use('/api/login', loginRouter)
 app.use('/api/teams', teamsRouter)
 app.use('/api/users', usersRouter)
 
