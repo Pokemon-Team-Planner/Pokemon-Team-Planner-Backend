@@ -1,5 +1,6 @@
 const Team = require('../models/team')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const initialTeams = [
   {
@@ -28,6 +29,14 @@ const initialTeams = [
   }
 ]
 
+const initialUsers = [
+  {
+    username: 'testing',
+    name: 'Testing',
+    password: 'salainen_on123'
+  }
+]
+
 const nonExistingId = async () => {
   const team = new Team({ 
     gameVersionPokedex: 'pokedex-firered.json',
@@ -50,6 +59,23 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const validToken = async () => {
+  const user = await User.findOne({ name: initialUsers[0].name }).exec()
+
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  }
+
+  const token = jwt.sign(
+    userForToken, 
+    process.env.SECRET,
+    { expiresIn: 60*60 }
+  )
+
+  return token
+}
+
 module.exports = {
-  initialTeams, nonExistingId, teamsInDb, usersInDb
+  initialTeams, initialUsers, nonExistingId, teamsInDb, usersInDb, validToken
 }

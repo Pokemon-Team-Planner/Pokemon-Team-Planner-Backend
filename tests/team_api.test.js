@@ -4,11 +4,14 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Team = require('../models/team')
+const User = require('../models/user')
 
-describe('when there are initially some teams saved', () => {
+describe('when there are initially some teams and users saved', () => {
   beforeEach(async () => {
     await Team.deleteMany({})
     await Team.insertMany(helper.initialTeams)
+    await User.deleteMany({})
+    await User.insertMany(helper.initialUsers)
   })
 
   test('teams are returned as json', async () => {
@@ -35,7 +38,7 @@ describe('when there are initially some teams saved', () => {
   })
 
   describe('adding a new team', () => {
-    test('succeeds with valid data ', async () => {
+    test('succeeds with valid data and token', async () => {
       const newTeam = {
         gameVersionPokedex: 'pokedex-firered.json',
         date: new Date(),
@@ -48,9 +51,12 @@ describe('when there are initially some teams saved', () => {
           { pokemonID: 6 }
         ]
       }
+
+      const token = await helper.validToken()
   
       await api
         .post('/api/teams')
+        .set('Authorization', `bearer ${token}`)
         .send(newTeam)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -71,9 +77,12 @@ describe('when there are initially some teams saved', () => {
         date: new Date(),
         team: []
       }
+
+      const token = await helper.validToken()
   
       await api
         .post('/api/teams')
+        .set('Authorization', `bearer ${token}`)
         .send(newTeam)
         .expect(400)
   
@@ -96,9 +105,12 @@ describe('when there are initially some teams saved', () => {
           { pokemonID: 7 }
         ]
       }
+
+      const token = await helper.validToken()
   
       await api
         .post('/api/teams')
+        .set('Authorization', `bearer ${token}`)
         .send(newTeam)
         .expect(400)
   
