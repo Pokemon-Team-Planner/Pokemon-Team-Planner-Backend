@@ -1,7 +1,7 @@
 const teamsRouter = require('express').Router()
+const req = require('express/lib/request')
 const Team = require('../models/team')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 teamsRouter.get('/', async (request, response) => {
   const teams = await Team.find({})
@@ -41,14 +41,9 @@ teamsRouter.put('/:id', async (request, response) => {
   }
 })
 
-teamsRouter.post('/', async (request, response) => {
+teamsRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!request.token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
 
   const team = new Team({
     gameVersionPokedex: body.gameVersionPokedex,
