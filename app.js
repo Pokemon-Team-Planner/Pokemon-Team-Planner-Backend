@@ -25,6 +25,7 @@ app.use(express.json())
 app.use(express.static('build'))
 app.use(express.static('public'))
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/teams', teamsRouter)
