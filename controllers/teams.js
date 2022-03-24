@@ -1,5 +1,4 @@
 const teamsRouter = require('express').Router()
-const req = require('express/lib/request')
 const Team = require('../models/team')
 const { userExtractor } = require('../utils/middleware')
 
