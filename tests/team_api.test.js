@@ -176,7 +176,6 @@ describe('when there are initially some teams and users saved', () => {
         .expect(204)
 
       const teamsAtEnd = await helper.teamsInDb()
-      console.log(teamsAtEnd)
       expect(teamsAtEnd).toHaveLength(helper.initialTeams.length)
     })
 

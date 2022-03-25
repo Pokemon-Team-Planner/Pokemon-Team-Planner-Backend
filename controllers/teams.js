@@ -19,8 +19,7 @@ teamsRouter.get('/:id', async (request, response) => {
 teamsRouter.delete('/:id', userExtractor, async (request, response) => {
   const user = request.user
   const teamToBeDeleted = await Team.findById(request.params.id)
-  console.log(user)
-  console.log(teamToBeDeleted)
+
   if (!teamToBeDeleted) {
     response.status(204).end()
   }
