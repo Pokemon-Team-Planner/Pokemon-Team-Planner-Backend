@@ -16,8 +16,22 @@ teamsRouter.get('/:id', async (request, response) => {
   }
 })
 
-teamsRouter.delete('/:id', async (request, response) => {
-  await Team.findByIdAndDelete(request.params.id)
+teamsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const user = request.user
+  const teamToBeDeleted = await Team.findById(request.params.id)
+  console.log(user)
+  console.log(teamToBeDeleted)
+  if (!teamToBeDeleted) {
+    response.status(204).end()
+  }
+
+  if (teamToBeDeleted.user.toString() !== user._id.toString()) {
+    response.status(401).end().json({ error: 'unauthorized operation' })
+  }
+
+  await teamToBeDeleted.remove()
+  user.teams = user.teams.filter(team => team._id.toString() !== request.params.id)
+  await user.save()
   response.status(204).end()
 })
 

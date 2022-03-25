@@ -5,6 +5,8 @@ const app = require('../app')
 const api = supertest(app)
 const Team = require('../models/team')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const config = require('../utils/config')
 
 describe('when there are initially some teams and users saved', () => {
   beforeEach(async () => {
@@ -152,37 +154,81 @@ describe('when there are initially some teams and users saved', () => {
   })
   
   describe('deleting a team', () => {
-    test('succeeds with status code 204 if id is valid', async () => {
-      const teamsAtStart = await helper.teamsInDb()
-      const teamToDelete = teamsAtStart[0]
-  
+    test('succeeds with status code 204 if valid id & token matches creator', async () => {
+      const token = await helper.validToken()
+      const decodedToken = jwt.verify(token, config.SECRET)
+
+      const newTeam = new Team({
+        gameVersionPokedex: 'pokedex-firered.json',
+        date: new Date(),
+        team: [
+          { pokemonID: 11 },
+          { pokemonID: 22 },
+          { pokemonID: 33 }
+        ],
+        user: decodedToken.id
+      })
+      const teamToDelete = await newTeam.save()
+
       await api
         .delete(`/api/teams/${teamToDelete.id}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
-  
+
       const teamsAtEnd = await helper.teamsInDb()
-  
-      expect(teamsAtEnd).toHaveLength(
-        helper.initialTeams.length - 1
-      )
-  
-      const teams = teamsAtEnd.map(item => item.team)
-  
-      expect(teams).not.toContainEqual(teamToDelete.team)
+      console.log(teamsAtEnd)
+      expect(teamsAtEnd).toHaveLength(helper.initialTeams.length)
     })
 
     test('fails with status code 204 if id is non-existing', async () => {
       const nonExistingId = await helper.nonExistingId()
+      const token = await helper.validToken()
       await api
         .delete(`/api/teams/${nonExistingId}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
     })
 
     test('fails with status code 400 if invalid id', async () => {
       const invalidId = 'abcd1234'
+      const token = await helper.validToken()
       await api
         .delete(`/api/teams/${invalidId}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(400)
+    })
+
+    test('fails with status code 401 if valid id but token not matching creator', async () => {
+      const deleterToken = await helper.validTokenButNoCreatedTeams()
+
+      const creatorToken = await helper.validToken()
+      const decodedToken = jwt.verify(creatorToken, config.SECRET)
+      const newTeam = new Team({
+        gameVersionPokedex: 'pokedex-firered.json',
+        date: new Date(),
+        team: [
+          { pokemonID: 11 },
+          { pokemonID: 22 },
+          { pokemonID: 33 }
+        ],
+        user: decodedToken.id
+      })
+      const teamToDelete = await newTeam.save()
+
+      await api
+        .delete(`/api/teams/${teamToDelete.id}`)
+        .set('Authorization', `bearer ${deleterToken}`)
+        .expect(401)
+  
+      const teamsAtEnd = await helper.teamsInDb()
+  
+      expect(teamsAtEnd).toHaveLength(
+        helper.initialTeams.length + 1
+      )
+  
+      const teams = teamsAtEnd.map(item => item.team)
+  
+      expect(teams).toContainEqual(teamToDelete.toJSON().team)
     })
   })
 

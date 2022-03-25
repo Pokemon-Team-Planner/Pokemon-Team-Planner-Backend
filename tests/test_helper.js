@@ -1,6 +1,7 @@
 const Team = require('../models/team')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const config = require('../utils/config')
 
 const initialTeams = [
   {
@@ -69,7 +70,30 @@ const validToken = async () => {
 
   const token = jwt.sign(
     userForToken, 
-    process.env.SECRET,
+    config.SECRET,
+    { expiresIn: 60*60 }
+  )
+
+  return token
+}
+
+const validTokenButNoCreatedTeams = async () => {
+  const newUser = new User({
+    username: 'newhere',
+    name: 'I dont have teams yet',
+    password: 'salainen_on123'
+  })
+
+  await newUser.save()
+
+  const userForToken = {
+    username: newUser.username,
+    id: newUser._id,
+  }
+
+  const token = jwt.sign(
+    userForToken, 
+    config.SECRET,
     { expiresIn: 60*60 }
   )
 
@@ -77,5 +101,5 @@ const validToken = async () => {
 }
 
 module.exports = {
-  initialTeams, initialUsers, nonExistingId, teamsInDb, usersInDb, validToken
+  initialTeams, initialUsers, nonExistingId, teamsInDb, usersInDb, validToken, validTokenButNoCreatedTeams
 }
