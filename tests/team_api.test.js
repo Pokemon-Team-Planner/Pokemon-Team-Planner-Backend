@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
+
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
@@ -12,8 +14,16 @@ describe('when there are initially some teams and users saved', () => {
   beforeEach(async () => {
     await Team.deleteMany({})
     await Team.insertMany(helper.initialTeams)
+    
     await User.deleteMany({})
-    await User.insertMany(helper.initialUsers)
+    let hashedUsers = JSON.parse(JSON.stringify(helper.initialUsers))
+    await Promise.all(
+      hashedUsers.map(async user => {
+        user.passwordHash = await bcrypt.hash(user.password, 10)
+        delete user.password
+      })
+    )
+    await User.insertMany(hashedUsers)
   })
 
   test('teams are returned as json', async () => {
@@ -40,6 +50,15 @@ describe('when there are initially some teams and users saved', () => {
   })
 
   describe('adding a new team', () => {
+    let validToken
+    beforeEach(async () => {
+      const user = helper.initialUsers[0]
+      const response = await api
+        .post('/api/login')
+        .send({ username: user.username, password: user.password})
+      validToken = response.body.token
+    })
+
     test('succeeds with valid data and token', async () => {
       const newTeam = {
         gameVersionPokedex: 'pokedex-firered.json',
@@ -53,12 +72,10 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 6 }
         ]
       }
-
-      const token = await helper.validToken()
   
       await api
         .post('/api/teams')
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(newTeam)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -79,12 +96,10 @@ describe('when there are initially some teams and users saved', () => {
         date: new Date(),
         team: []
       }
-
-      const token = await helper.validToken()
   
       await api
         .post('/api/teams')
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(newTeam)
         .expect(400)
   
@@ -108,11 +123,9 @@ describe('when there are initially some teams and users saved', () => {
         ]
       }
 
-      const token = await helper.validToken()
-  
       await api
         .post('/api/teams')
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(newTeam)
         .expect(400)
   
@@ -154,9 +167,24 @@ describe('when there are initially some teams and users saved', () => {
   })
   
   describe('deleting a team', () => {
+    let validToken
+    let validTokenAnotherUser
+    beforeEach(async () => {
+      const user = helper.initialUsers[0]
+      const response = await api
+        .post('/api/login')
+        .send({ username: user.username, password: user.password})
+      validToken = response.body.token
+
+      const anotherUser = helper.initialUsers[1]
+      const anotherResponse = await api
+        .post('/api/login')
+        .send({ username: anotherUser.username, password: anotherUser.password})
+      validTokenAnotherUser = anotherResponse.body.token
+    })
+
     test('succeeds with status code 204 if valid id & token matches creator', async () => {
-      const token = await helper.validToken()
-      const decodedToken = jwt.verify(token, config.SECRET)
+      const decodedToken = jwt.verify(validToken, config.SECRET)
 
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
@@ -172,7 +200,7 @@ describe('when there are initially some teams and users saved', () => {
 
       await api
         .delete(`/api/teams/${teamToDelete.id}`)
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .expect(204)
 
       const teamsAtEnd = await helper.teamsInDb()
@@ -181,27 +209,22 @@ describe('when there are initially some teams and users saved', () => {
 
     test('fails with status code 204 if id is non-existing', async () => {
       const nonExistingId = await helper.nonExistingId()
-      const token = await helper.validToken()
       await api
         .delete(`/api/teams/${nonExistingId}`)
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .expect(204)
     })
 
     test('fails with status code 400 if invalid id', async () => {
       const invalidId = 'abcd1234'
-      const token = await helper.validToken()
       await api
         .delete(`/api/teams/${invalidId}`)
-        .set('Authorization', `bearer ${token}`)
+        .set('Authorization', `bearer ${validToken}`)
         .expect(400)
     })
 
     test('fails with status code 401 if valid id but token not matching creator', async () => {
-      const deleterToken = await helper.validTokenButNoCreatedTeams()
-
-      const creatorToken = await helper.validToken()
-      const decodedToken = jwt.verify(creatorToken, config.SECRET)
+      const decodedToken = jwt.verify(validToken, config.SECRET)
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
         date: new Date(),
@@ -216,7 +239,7 @@ describe('when there are initially some teams and users saved', () => {
 
       await api
         .delete(`/api/teams/${teamToDelete.id}`)
-        .set('Authorization', `bearer ${deleterToken}`)
+        .set('Authorization', `bearer ${validTokenAnotherUser}`)
         .expect(401)
   
       const teamsAtEnd = await helper.teamsInDb()

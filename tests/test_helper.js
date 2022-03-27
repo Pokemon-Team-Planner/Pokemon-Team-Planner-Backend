@@ -1,7 +1,5 @@
 const Team = require('../models/team')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
-const config = require('../utils/config')
 
 const initialTeams = [
   {
@@ -35,6 +33,11 @@ const initialUsers = [
     username: 'testing',
     name: 'Testing',
     password: 'salainen_on123'
+  },
+  {
+    username: 'anothertesting',
+    name: 'Another testing user',
+    password: 'salainen_on456'
   }
 ]
 
@@ -60,46 +63,6 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
-const validToken = async () => {
-  const user = await User.findOne({ name: initialUsers[0].name }).exec()
-
-  const userForToken = {
-    username: user.username,
-    id: user._id,
-  }
-
-  const token = jwt.sign(
-    userForToken, 
-    config.SECRET,
-    { expiresIn: 60*60 }
-  )
-
-  return token
-}
-
-const validTokenButNoCreatedTeams = async () => {
-  const newUser = new User({
-    username: 'newhere',
-    name: 'I dont have teams yet',
-    password: 'salainen_on123'
-  })
-
-  await newUser.save()
-
-  const userForToken = {
-    username: newUser.username,
-    id: newUser._id,
-  }
-
-  const token = jwt.sign(
-    userForToken, 
-    config.SECRET,
-    { expiresIn: 60*60 }
-  )
-
-  return token
-}
-
 module.exports = {
-  initialTeams, initialUsers, nonExistingId, teamsInDb, usersInDb, validToken, validTokenButNoCreatedTeams
+  initialTeams, initialUsers, nonExistingId, teamsInDb, usersInDb
 }
