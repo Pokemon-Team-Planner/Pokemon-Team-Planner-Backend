@@ -38,6 +38,11 @@ const initialUsers = [
     username: 'anothertesting',
     name: 'Another testing user',
     password: 'salainen_on456'
+  },
+  {
+    username: 'root',
+    name: 'Im root',
+    password: 'verisekretpw'
   }
 ]
 

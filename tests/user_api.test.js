@@ -6,14 +6,38 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 
-describe('when there is initially one user at db', () => {
+describe('when there are initially some users saved', () => {
   beforeEach(async () => {
     await User.deleteMany({})
+    let hashedUsers = JSON.parse(JSON.stringify(helper.initialUsers))
+    await Promise.all(
+      hashedUsers.map(async user => {
+        user.passwordHash = await bcrypt.hash(user.password, 10)
+        delete user.password
+      })
+    )
+    await User.insertMany(hashedUsers)
+  })
 
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
+  test('users are returned as json', async () => {
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
 
-    await user.save()
+  test('all users are returned', async () => {
+    const response = await api.get('/api/users')
+
+    expect(response.body).toHaveLength(helper.initialUsers.length)
+  })
+
+  test('a specific user is within the returned users', async () => {
+    const response = await api.get('/api/users')
+
+    const usernames = response.body.map(item => item.username)
+
+    expect(usernames).toContain('root')
   })
 
   describe('creation succeeds if', () => {
