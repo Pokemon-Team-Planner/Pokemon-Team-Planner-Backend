@@ -40,6 +40,35 @@ describe('when there are initially some users saved', () => {
     expect(usernames).toContain('root')
   })
 
+  describe('when user has a team saved', () => {
+    beforeEach(async () => {
+      const user = helper.initialUsers[0]
+      const response = await api
+        .post('/api/login')
+        .send({ username: user.username, password: user.password})
+      const token = response.body.token
+
+      await api
+        .post('/api/teams')
+        .set('Authorization', `bearer ${token}`)
+        .send(helper.initialTeams[0])
+        .expect(201)
+    })
+
+    test('team is populated in returned users', async () => {
+      const response = await api.get('/api/users')
+
+      const teams = []
+      response.body.forEach(user => {
+        user.teams.forEach(object => {
+          teams.push(object.team)
+        })
+      })
+
+      expect(teams).toContainEqual(helper.initialTeams[0].team)
+    })
+  })
+
   describe('creation succeeds if', () => {
     test('username is fresh and unique', async () => {
       const usersAtStart = await helper.usersInDb()
