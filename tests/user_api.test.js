@@ -67,6 +67,47 @@ describe('when there are initially some users saved', () => {
 
       expect(teams).toContainEqual(helper.initialTeams[0].team)
     })
+
+    test('team is populated when viewing that specific user', async () => {
+      let user = await User.findOne({ username: helper.initialUsers[0].username})
+      user = user.toJSON()
+      const response = await api.get(`/api/users/${user.id}`)
+
+      const teams = response.body.teams.map(object => object.team)
+
+      expect(teams).toContainEqual(helper.initialTeams[0].team)
+    })
+  })
+
+  describe('viewing a user', () => {
+    test('succeeds with valid id', async () => {
+      const usersAtStart = await helper.usersInDb()
+  
+      const userToView = usersAtStart[0]
+  
+      const resultUser = await api
+        .get(`/api/users/${userToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+  
+      const processedUserToView = JSON.parse(JSON.stringify(userToView)) //tranforms date-object to string
+  
+      expect(resultUser.body).toEqual(processedUserToView)
+    })
+
+    test('fails with status code 404 if id is non-existing', async () => {
+      const nonExistingId = await helper.nonExistingId()
+      await api
+        .get(`/api/users/${nonExistingId}`)
+        .expect(404)
+    })
+
+    test('fails with status code 400 if invalid id', async () => {
+      const invalidId = 'abcd1234'
+      await api
+        .get(`/api/users/${invalidId}`)
+        .expect(400)
+    })
   })
 
   describe('creation succeeds if', () => {

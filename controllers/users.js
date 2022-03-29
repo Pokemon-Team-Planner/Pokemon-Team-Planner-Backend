@@ -8,6 +8,17 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
+usersRouter.get('/:id', async (request, response) => {
+  const user = await User
+    .findById(request.params.id).populate('teams', { gameVersionPokedex: 1, date: 1, team: 1 })
+
+  if (!user) {
+    return response.status(404).end()
+  }
+  
+  response.json(user)
+})
+
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
