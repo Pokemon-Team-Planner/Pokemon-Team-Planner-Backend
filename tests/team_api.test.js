@@ -10,11 +10,18 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
 
+const login = async user => {
+  const response = await api
+    .post('/api/login')
+    .send({ username: user.username, password: user.password})
+  return response.body.token
+}
+
 describe('when there are initially some teams and users saved', () => {
   beforeEach(async () => {
     await Team.deleteMany({})
     await Team.insertMany(helper.initialTeams)
-    
+
     await User.deleteMany({})
     let hashedUsers = JSON.parse(JSON.stringify(helper.initialUsers))
     await Promise.all(
@@ -52,11 +59,7 @@ describe('when there are initially some teams and users saved', () => {
   describe('adding a new team', () => {
     let validToken
     beforeEach(async () => {
-      const user = helper.initialUsers[0]
-      const response = await api
-        .post('/api/login')
-        .send({ username: user.username, password: user.password})
-      validToken = response.body.token
+      validToken = await login(helper.initialUsers[0])
     })
 
     test('succeeds with valid data and token', async () => {
@@ -170,17 +173,8 @@ describe('when there are initially some teams and users saved', () => {
     let validToken
     let validTokenAnotherUser
     beforeEach(async () => {
-      const user = helper.initialUsers[0]
-      const response = await api
-        .post('/api/login')
-        .send({ username: user.username, password: user.password})
-      validToken = response.body.token
-
-      const anotherUser = helper.initialUsers[1]
-      const anotherResponse = await api
-        .post('/api/login')
-        .send({ username: anotherUser.username, password: anotherUser.password})
-      validTokenAnotherUser = anotherResponse.body.token
+      validToken = await login(helper.initialUsers[0])
+      validTokenAnotherUser = await login(helper.initialUsers[1])
     })
 
     test('succeeds with status code 204 if valid id & token matches creator', async () => {
