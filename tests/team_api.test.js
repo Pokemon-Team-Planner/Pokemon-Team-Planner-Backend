@@ -17,6 +17,10 @@ const login = async user => {
   return response.body.token
 }
 
+const extractUser = token => {
+  return jwt.verify(token, config.SECRET)
+}
+
 describe('when there are initially some teams and users saved', () => {
   beforeEach(async () => {
     await Team.deleteMany({})
@@ -249,29 +253,46 @@ describe('when there are initially some teams and users saved', () => {
   })
 
   describe('updating a team', () => {
-    test('succeeds with valid team and id', async () => {
-      const teamsAtStart = await helper.teamsInDb()
-      const teamToUpdate = teamsAtStart[0]
+    let validToken
+    //let validTokenAnotherUser
+    beforeEach(async () => {
+      validToken = await login(helper.initialUsers[0])
+      //validTokenAnotherUser = await login(helper.initialUsers[1])
+    })
+
+    test('succeeds with valid team, id & if token matches creator', async () => {
+      const user = extractUser(validToken)
+
+      const newTeam = new Team({
+        gameVersionPokedex: 'pokedex-firered.json',
+        date: new Date(),
+        team: [
+          { pokemonID: 11 },
+          { pokemonID: 22 },
+          { pokemonID: 33 }
+        ],
+        user: user.id
+      })
+      const teamToUpdate = await newTeam.save()
+
       const updatedTeam = {
         team: [
-          { pokemonID: 9 },
-          { pokemonID: 9 },
-          { pokemonID: 9 },
-          { pokemonID: 9 },
-          { pokemonID: 9 },
-          { pokemonID: 9 }
+          { pokemonID: 44 },
+          { pokemonID: 55 },
+          { pokemonID: 66 },
         ]
       }
   
       await api
         .put(`/api/teams/${teamToUpdate.id}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(updatedTeam)
         .expect(200)
   
       const teamsAtEnd = await helper.teamsInDb()
   
       expect(teamsAtEnd).toHaveLength(
-        helper.initialTeams.length
+        helper.initialTeams.length + 1
       )
   
       const teams = teamsAtEnd.map(item => item.team)
@@ -289,17 +310,30 @@ describe('when there are initially some teams and users saved', () => {
   
       await api
         .put(`/api/teams/${invalidId}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(updatedTeam)
         .expect(400)
     })
 
     test('fails with status code 400 if team missing', async () => {
-      const teamsAtStart = await helper.teamsInDb()
-      const teamToUpdate = teamsAtStart[0]
+      const user = extractUser(validToken)
+
+      const newTeam = new Team({
+        gameVersionPokedex: 'pokedex-firered.json',
+        date: new Date(),
+        team: [
+          { pokemonID: 11 },
+          { pokemonID: 22 },
+          { pokemonID: 33 }
+        ],
+        user: user.id
+      })
+      const teamToUpdate = await newTeam.save()
       const updatedTeam = {}
   
       await api
         .put(`/api/teams/${teamToUpdate.id}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(updatedTeam)
         .expect(400)
     })
@@ -313,6 +347,7 @@ describe('when there are initially some teams and users saved', () => {
       }
       await api
         .put(`/api/teams/${nonExistingId}`)
+        .set('Authorization', `bearer ${validToken}`)
         .send(updatedTeam)
         .expect(404)
     })

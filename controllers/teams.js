@@ -34,8 +34,8 @@ teamsRouter.delete('/:id', userExtractor, async (request, response) => {
   response.status(204).end()
 })
 
-teamsRouter.put('/:id', async (request, response) => {
-  const body = request.body
+teamsRouter.put('/:id', userExtractor, async (request, response) => {
+  const user = request.user
 
   // Using findById and save to update instead of findByIdAndUpdate
   // to have proper status codes for failed updates
@@ -43,7 +43,12 @@ teamsRouter.put('/:id', async (request, response) => {
   if (!teamToUpdate) {
     response.status(404).end()
   }
-  teamToUpdate.team = body.team
+
+  if (teamToUpdate.user.toString() !== user._id.toString()) {
+    response.status(401).end().json({ error: 'unauthorized operation' })
+  }
+
+  teamToUpdate.team = request.body.team
   const updatedTeam = await teamToUpdate.save()
 
   if (updatedTeam) {
