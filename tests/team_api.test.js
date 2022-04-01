@@ -182,7 +182,7 @@ describe('when there are initially some teams and users saved', () => {
     })
 
     test('succeeds with status code 204 if valid id & token matches creator', async () => {
-      const decodedToken = jwt.verify(validToken, config.SECRET)
+      const user = extractUser(validToken)
 
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
@@ -192,7 +192,7 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: decodedToken.id
+        user: user.id
       })
       const teamToDelete = await newTeam.save()
 
@@ -222,7 +222,7 @@ describe('when there are initially some teams and users saved', () => {
     })
 
     test('fails with status code 401 if valid id but token not matching creator', async () => {
-      const decodedToken = jwt.verify(validToken, config.SECRET)
+      const user = extractUser(validToken)
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
         date: new Date(),
@@ -231,7 +231,7 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: decodedToken.id
+        user: user.id
       })
       const teamToDelete = await newTeam.save()
 
