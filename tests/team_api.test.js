@@ -254,10 +254,10 @@ describe('when there are initially some teams and users saved', () => {
 
   describe('updating a team', () => {
     let validToken
-    //let validTokenAnotherUser
+    let validTokenAnotherUser
     beforeEach(async () => {
       validToken = await login(helper.initialUsers[0])
-      //validTokenAnotherUser = await login(helper.initialUsers[1])
+      validTokenAnotherUser = await login(helper.initialUsers[1])
     })
 
     test('succeeds with valid team, id & if token matches creator', async () => {
@@ -350,6 +350,41 @@ describe('when there are initially some teams and users saved', () => {
         .set('Authorization', `bearer ${validToken}`)
         .send(updatedTeam)
         .expect(404)
+    })
+
+    test('fails with status code 401 if valid id but token not matching creator', async () => {
+      const user = extractUser(validToken)
+      const newTeam = new Team({
+        gameVersionPokedex: 'pokedex-firered.json',
+        date: new Date(),
+        team: [
+          { pokemonID: 11 }
+        ],
+        user: user.id
+      })
+      const teamToUpdate = await newTeam.save()
+
+      const updatedTeam = {
+        team: [
+          { pokemonID: 9 }
+        ]
+      }
+
+      await api
+        .put(`/api/teams/${teamToUpdate.id}`)
+        .set('Authorization', `bearer ${validTokenAnotherUser}`)
+        .send(updatedTeam)
+        .expect(401)
+  
+      const teamsAtEnd = await helper.teamsInDb()
+  
+      expect(teamsAtEnd).toHaveLength(
+        helper.initialTeams.length + 1
+      )
+  
+      const teams = teamsAtEnd.map(item => item.team)
+  
+      expect(teams).toContainEqual(teamToUpdate.toJSON().team)
     })
   })
 })
