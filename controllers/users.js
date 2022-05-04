@@ -4,13 +4,13 @@ const User = require('../models/user')
 
 usersRouter.get('/', async (request, response) => {
   const users = await User
-    .find({}).populate('teams', { gameVersionPokedex: 1, date: 1, team: 1 })
+    .find({}).populate('teams', { gameVersionPokedex: 1, date: 1, team: 1, title: 1, description: 1 })
   response.json(users)
 })
 
 usersRouter.get('/:id', async (request, response) => {
   const user = await User
-    .findById(request.params.id).populate('teams', { gameVersionPokedex: 1, date: 1, team: 1 })
+    .findById(request.params.id).populate('teams', { gameVersionPokedex: 1, date: 1, team: 1, title: 1, description: 1 })
 
   if (!user) {
     return response.status(404).end()
