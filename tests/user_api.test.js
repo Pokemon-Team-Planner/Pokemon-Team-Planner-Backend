@@ -58,14 +58,14 @@ describe('when there are initially some users saved', () => {
     test('team is populated in returned users', async () => {
       const response = await api.get('/api/users')
 
-      const teams = []
+      const titles = []
       response.body.forEach(user => {
         user.teams.forEach(object => {
-          teams.push(object.team)
+          titles.push(object.title)
         })
       })
 
-      expect(teams).toContainEqual(helper.initialTeams[0].team)
+      expect(titles).toContain(helper.initialTeams[0].title)
     })
 
     test('team is populated when viewing that specific user', async () => {
@@ -73,9 +73,9 @@ describe('when there are initially some users saved', () => {
       user = user.toJSON()
       const response = await api.get(`/api/users/${user.id}`)
 
-      const teams = response.body.teams.map(object => object.team)
+      const titles = response.body.teams.map(object => object.title)
 
-      expect(teams).toContainEqual(helper.initialTeams[0].team)
+      expect(titles).toContainEqual(helper.initialTeams[0].title)
     })
   })
 
