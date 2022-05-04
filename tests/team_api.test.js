@@ -50,13 +50,13 @@ describe('when there are initially some teams and users saved', () => {
     expect(response.body).toHaveLength(helper.initialTeams.length)
   })
 
-  test('a specific team is within the returned teams', async () => {
+  test('a specific title is within the returned teams', async () => {
     const response = await api.get('/api/teams')
 
-    const contents = response.body.map(item => item.team)
+    const contents = response.body.map(item => item.title)
 
-    expect(contents).toContainEqual(
-      helper.initialTeams[0].team
+    expect(contents).toContain(
+      helper.initialTeams[0].title
     )
   })
 
