@@ -24,6 +24,14 @@ const teamSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  title: {
+    type: String,
+    required: [true, 'title is required']
+  },
+  description: {
+    type: String,
+    required: false
   }
 })
 

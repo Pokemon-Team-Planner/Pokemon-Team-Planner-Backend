@@ -12,7 +12,9 @@ const initialTeams = [
       { pokemonID: 87 },
       { pokemonID: 98 },
       { pokemonID: 134 }
-    ]
+    ],
+    title: 'Greatest team ever',
+    description: 'Great for early, mid and late game!'
   },
   {
     gameVersionPokedex: 'pokedex-firered.json',
@@ -24,7 +26,9 @@ const initialTeams = [
       { pokemonID: 65 },
       { pokemonID: 78 },
       { pokemonID: 120 }
-    ]
+    ],
+    title: 'Ok team',
+    description: 'Challenge yourself'
   }
 ]
 
@@ -50,7 +54,8 @@ const nonExistingId = async () => {
   const team = new Team({ 
     gameVersionPokedex: 'pokedex-firered.json',
     date: new Date(),
-    team: [{ pokemonID: 1 }]
+    team: [{ pokemonID: 1 }],
+    title: 'some title'
   })
   await team.save()
   await team.remove()

@@ -1,6 +1,11 @@
-PUT http://localhost:3001/api/teams/62279c22a1fc002372f92dab
+PUT http://localhost:3001/api/teams/6272cccc33cf368e36e93fc7
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjIyZjQ3ZTJmZGFhYTU2OGM3NTE2YTM3IiwiaWF0IjoxNjUxNjkwMjI2LCJleHAiOjE2NTE2OTM4MjZ9.yG_QBkpmP1wGx3CF_Uv5S_laoQikZ_Qm1Jm2ScUj0SE
 
 {
-
+  "team": [
+    { "pokemonID": 6 }
+  ],
+  "title": "new title",
+  "description": "new desc"
 }

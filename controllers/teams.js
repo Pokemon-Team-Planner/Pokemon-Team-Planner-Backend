@@ -49,6 +49,8 @@ teamsRouter.put('/:id', userExtractor, async (request, response) => {
   }
 
   teamToUpdate.team = request.body.team
+  teamToUpdate.title = request.body.title
+  teamToUpdate.description = request.body.description
   const updatedTeam = await teamToUpdate.save()
 
   if (updatedTeam) {
@@ -66,7 +68,9 @@ teamsRouter.post('/', userExtractor, async (request, response) => {
     gameVersionPokedex: body.gameVersionPokedex,
     date: new Date(),
     team: body.team,
-    user: user._id
+    user: user._id,
+    title: body.title,
+    description: body.description
   })
 
   const savedTeam = await team.save()

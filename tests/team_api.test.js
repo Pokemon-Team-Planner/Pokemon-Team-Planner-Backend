@@ -77,7 +77,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 4 },
           { pokemonID: 5 },
           { pokemonID: 6 }
-        ]
+        ],
+        title: 'my new team'
       }
   
       await api
@@ -89,11 +90,11 @@ describe('when there are initially some teams and users saved', () => {
   
       const teamsAtEnd = await helper.teamsInDb()
   
-      const teams = teamsAtEnd.map(item => item.team)
+      const titles = teamsAtEnd.map(item => item.title)
   
       expect(teamsAtEnd).toHaveLength(helper.initialTeams.length + 1)
-      expect(teams).toContainEqual(
-        newTeam.team
+      expect(titles).toContain(
+        newTeam.title
       )
     })
   
@@ -192,7 +193,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: user.id
+        user: user.id,
+        title: 'my new team'
       })
       const teamToDelete = await newTeam.save()
 
@@ -231,7 +233,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: user.id
+        user: user.id,
+        title: 'my new team'
       })
       const teamToDelete = await newTeam.save()
 
@@ -246,9 +249,9 @@ describe('when there are initially some teams and users saved', () => {
         helper.initialTeams.length + 1
       )
   
-      const teams = teamsAtEnd.map(item => item.team)
+      const titles = teamsAtEnd.map(item => item.title)
   
-      expect(teams).toContainEqual(teamToDelete.toJSON().team)
+      expect(titles).toContain(teamToDelete.toJSON().title)
     })
   })
 
@@ -271,7 +274,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: user.id
+        user: user.id,
+        title: 'my new team'
       })
       const teamToUpdate = await newTeam.save()
 
@@ -280,7 +284,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 44 },
           { pokemonID: 55 },
           { pokemonID: 66 },
-        ]
+        ],
+        title: 'new title'
       }
   
       await api
@@ -295,9 +300,9 @@ describe('when there are initially some teams and users saved', () => {
         helper.initialTeams.length + 1
       )
   
-      const teams = teamsAtEnd.map(item => item.team)
+      const titles = teamsAtEnd.map(item => item.title)
   
-      expect(teams).toContainEqual(updatedTeam.team)
+      expect(titles).toContain(updatedTeam.title)
     })
 
     test('fails with status code 400 if invalid id', async () => {
@@ -326,7 +331,8 @@ describe('when there are initially some teams and users saved', () => {
           { pokemonID: 22 },
           { pokemonID: 33 }
         ],
-        user: user.id
+        user: user.id,
+        title: 'my new team'
       })
       const teamToUpdate = await newTeam.save()
       const updatedTeam = {}
@@ -360,14 +366,13 @@ describe('when there are initially some teams and users saved', () => {
         team: [
           { pokemonID: 11 }
         ],
-        user: user.id
+        user: user.id,
+        title: 'my new team'
       })
       const teamToUpdate = await newTeam.save()
 
       const updatedTeam = {
-        team: [
-          { pokemonID: 9 }
-        ]
+        title: 'new title'
       }
 
       await api
@@ -382,9 +387,9 @@ describe('when there are initially some teams and users saved', () => {
         helper.initialTeams.length + 1
       )
   
-      const teams = teamsAtEnd.map(item => item.team)
+      const titles = teamsAtEnd.map(item => item.title)
   
-      expect(teams).toContainEqual(teamToUpdate.toJSON().team)
+      expect(titles).toContain(teamToUpdate.toJSON().title)
     })
   })
 })
