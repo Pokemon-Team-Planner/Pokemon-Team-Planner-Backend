@@ -1,0 +1,8 @@
+{
+  "FireRed": {
+    "data": "firered-pokedex.json"
+  },
+  "LeafGreen": {
+    "data": "leafgreen-pokedex.json"
+  }
+}
