@@ -5,6 +5,10 @@ const teamSchema = new mongoose.Schema({
     type: String,
     required: [true, 'gameVersionPokedex is required']
   },
+  gameVersionName: {
+    type: String,
+    required: [true, 'gameVersionName is required']
+  },
   date: {
     type: Date,
     required: true

@@ -66,6 +66,7 @@ teamsRouter.post('/', userExtractor, async (request, response) => {
 
   const team = new Team({
     gameVersionPokedex: body.gameVersionPokedex,
+    gameVersionName: body.gameVersionName,
     date: new Date(),
     team: body.team,
     user: user._id,
