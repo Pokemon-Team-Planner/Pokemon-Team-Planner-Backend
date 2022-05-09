@@ -1,5 +1,6 @@
 const teamsRouter = require('express').Router()
 const Team = require('../models/team')
+const User = require('../models/user')
 const { userExtractor } = require('../utils/middleware')
 
 teamsRouter.get('/', async (request, response) => {
@@ -77,6 +78,37 @@ teamsRouter.post('/', userExtractor, async (request, response) => {
   const savedTeam = await team.save()
   user.teams = user.teams.concat(savedTeam._id)
   await user.save()
+  
+  response.status(201).json(savedTeam)
+})
+
+teamsRouter.post('/anonymous', async (request, response) => {
+  const body = request.body
+  
+  let anonymousUser = await User.findOne({ username: 'anon' }).exec()
+  //If anonymous user isn't created yet, let's create it
+  if (!anonymousUser) {
+    const user = new User({
+      username: 'anon',
+      name: 'Anonymous'
+    })
+  
+    anonymousUser = await user.save()
+  }
+
+  const team = new Team({
+    gameVersionPokedex: body.gameVersionPokedex,
+    gameVersionName: body.gameVersionName,
+    date: new Date(),
+    team: body.team,
+    user: anonymousUser._id,
+    title: body.title,
+    description: body.description
+  })
+
+  const savedTeam = await team.save()
+  anonymousUser.teams = anonymousUser.teams.concat(savedTeam._id)
+  await anonymousUser.save()
   
   response.status(201).json(savedTeam)
 })

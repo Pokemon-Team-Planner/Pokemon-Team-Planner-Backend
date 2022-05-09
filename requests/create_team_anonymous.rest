@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/teams/anonymous
+Content-Type: application/json
+
+{
+  "gameVersionPokedex": "pokedex-firered.json",
+  "gameVersionName": "FireRed",
+  "team": [
+    { "pokemonID": 6 },
+    { "pokemonID": 53 },
+    { "pokemonID": 24 },
+    { "pokemonID": 87 },
+    { "pokemonID": 98 },
+    { "pokemonID": 134 }
+  ],
+  "title": "Anonymous team test",
+  "description": "Great for early, mid and late game!"
+}
