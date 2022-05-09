@@ -78,6 +78,8 @@ teamsRouter.post('/', userExtractor, async (request, response) => {
   const savedTeam = await team.save()
   user.teams = user.teams.concat(savedTeam._id)
   await user.save()
+
+  await Team.populate(savedTeam, {path: 'user', select: ['username', 'name']})
   
   response.status(201).json(savedTeam)
 })
@@ -109,6 +111,8 @@ teamsRouter.post('/anonymous', async (request, response) => {
   const savedTeam = await team.save()
   anonymousUser.teams = anonymousUser.teams.concat(savedTeam._id)
   await anonymousUser.save()
+
+  await Team.populate(savedTeam, {path: 'user', select: ['username', 'name']})
   
   response.status(201).json(savedTeam)
 })
