@@ -3,7 +3,7 @@ const Team = require('../models/team')
 const { userExtractor } = require('../utils/middleware')
 
 teamsRouter.get('/', async (request, response) => {
-  const teams = await Team.find({})
+  const teams = await Team.find({}).populate('user', { username: 1, name: 1})
   response.json(teams)
 })
 
