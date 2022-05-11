@@ -4,6 +4,7 @@ const User = require('../models/user')
 const initialTeams = [
   {
     gameVersionPokedex: 'pokedex-firered.json',
+    gameVersionName: 'FireRed',
     date: new Date(),
     team: [
       { pokemonID: 6 },
@@ -18,6 +19,7 @@ const initialTeams = [
   },
   {
     gameVersionPokedex: 'pokedex-firered.json',
+    gameVersionName: 'FireRed',
     date: new Date(),
     team: [
       { pokemonID: 9 },
@@ -53,6 +55,7 @@ const initialUsers = [
 const nonExistingId = async () => {
   const team = new Team({ 
     gameVersionPokedex: 'pokedex-firered.json',
+    gameVersionName: 'FireRed',
     date: new Date(),
     team: [{ pokemonID: 1 }],
     title: 'some title'

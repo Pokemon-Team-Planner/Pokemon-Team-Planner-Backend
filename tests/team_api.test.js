@@ -69,6 +69,7 @@ describe('when there are initially some teams and users saved', () => {
     test('succeeds with valid data and token', async () => {
       const newTeam = {
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 1 },
@@ -119,6 +120,7 @@ describe('when there are initially some teams and users saved', () => {
     test('fails with status code 400 if more than 6 pokemon in team', async () => {
       const newTeam = {
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 1 },
@@ -187,6 +189,7 @@ describe('when there are initially some teams and users saved', () => {
 
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 11 },
@@ -227,6 +230,7 @@ describe('when there are initially some teams and users saved', () => {
       const user = extractUser(validToken)
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 11 },
@@ -268,6 +272,7 @@ describe('when there are initially some teams and users saved', () => {
 
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 11 },
@@ -325,6 +330,7 @@ describe('when there are initially some teams and users saved', () => {
 
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 11 },
@@ -362,6 +368,7 @@ describe('when there are initially some teams and users saved', () => {
       const user = extractUser(validToken)
       const newTeam = new Team({
         gameVersionPokedex: 'pokedex-firered.json',
+        gameVersionName: 'FireRed',
         date: new Date(),
         team: [
           { pokemonID: 11 }
