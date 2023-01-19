@@ -1,1 +1,7 @@
-DELETE http://localhost:3001/api/teams/61f406711ffb274e75768696
+DELETE http://localhost:3001/api/teams/63c9a55cb4533ea108974d4e
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjIyZjQ3ZTJmZGFhYTU2OGM3NTE2YTM3IiwiaWF0IjoxNjc0MTU5MTkxLCJleHAiOjE2NzQxNjI3OTF9.UfJYsOBBpxEZqSJcN6nuFWbUZqyb7zXXeYJfMNwyXLg
+
+### Response
+#### Status Code: 204 No Content
+#### Headers
+#### Body: empty

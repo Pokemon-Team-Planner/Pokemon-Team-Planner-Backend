@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/teams
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjIyZjQ3ZTJmZGFhYTU2OGM3NTE2YTM3IiwiaWF0IjoxNjUxNjkwMjI2LCJleHAiOjE2NTE2OTM4MjZ9.yG_QBkpmP1wGx3CF_Uv5S_laoQikZ_Qm1Jm2ScUj0SE
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjIyZjQ3ZTJmZGFhYTU2OGM3NTE2YTM3IiwiaWF0IjoxNjc0MTU5MTkxLCJleHAiOjE2NzQxNjI3OTF9.UfJYsOBBpxEZqSJcN6nuFWbUZqyb7zXXeYJfMNwyXLg
 
 {
   "gameVersionPokedex": "pokedex-firered.json",
+  "gameVersionName": "FireRed",
   "team": [
     { "pokemonID": 6 },
     { "pokemonID": 53 },
@@ -15,3 +16,50 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkb
   "title": "Greatest team ever",
   "description": "Great for early, mid and late game!"
 }
+
+### Response
+#### Status Code: 201 Created
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+```json
+{
+  "gameVersionPokedex": "pokedex-firered.json",
+  "gameVersionName": "FireRed",
+  "date": "2023-01-19T20:17:32.067Z",
+  "team": [
+    {
+      "pokemonID": 6,
+      "_id": "63c9a55cb4533ea108974d4f"
+    },
+    {
+      "pokemonID": 53,
+      "_id": "63c9a55cb4533ea108974d50"
+    },
+    {
+      "pokemonID": 24,
+      "_id": "63c9a55cb4533ea108974d51"
+    },
+    {
+      "pokemonID": 87,
+      "_id": "63c9a55cb4533ea108974d52"
+    },
+    {
+      "pokemonID": 98,
+      "_id": "63c9a55cb4533ea108974d53"
+    },
+    {
+      "pokemonID": 134,
+      "_id": "63c9a55cb4533ea108974d54"
+    }
+  ],
+  "user": {
+    "username": "admin1",
+    "name": "Admin",
+    "id": "622f47e2fdaaa568c7516a37"
+  },
+  "title": "Greatest team ever",
+  "description": "Great for early, mid and late game!",
+  "id": "63c9a55cb4533ea108974d4e"
+}
+```

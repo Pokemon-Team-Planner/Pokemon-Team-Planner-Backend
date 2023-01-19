@@ -5,3 +5,16 @@ Content-Type: application/json
   "username": "admin1",
   "password": "salainen_on"
 }
+
+### Response
+#### Status Code: 200 OK
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjIyZjQ3ZTJmZGFhYTU2OGM3NTE2YTM3IiwiaWF0IjoxNjc0MTU5MTkxLCJleHAiOjE2NzQxNjI3OTF9.UfJYsOBBpxEZqSJcN6nuFWbUZqyb7zXXeYJfMNwyXLg",
+  "username": "admin1",
+  "name": "Admin"
+}
+```

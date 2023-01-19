@@ -1,1 +1,89 @@
 GET http://localhost:3001/api/teams
+
+### Response
+#### Status Code: 200 OK
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+```json
+[
+  {
+    "gameVersionPokedex": "pokedex-firered.json",
+    "gameVersionName": "FireRed",
+    "date": "2022-05-09T22:19:49.897Z",
+    "team": [
+      {
+        "pokemonID": 6,
+        "_id": "62799385833fa1541f11d88b"
+      },
+      {
+        "pokemonID": 53,
+        "_id": "62799385833fa1541f11d88c"
+      },
+      {
+        "pokemonID": 24,
+        "_id": "62799385833fa1541f11d88d"
+      },
+      {
+        "pokemonID": 87,
+        "_id": "62799385833fa1541f11d88e"
+      },
+      {
+        "pokemonID": 98,
+        "_id": "62799385833fa1541f11d88f"
+      },
+      {
+        "pokemonID": 134,
+        "_id": "62799385833fa1541f11d890"
+      }
+    ],
+    "user": {
+      "username": "anon",
+      "name": "Anonymous",
+      "id": "62797e31258e4a82d0186d54"
+    },
+    "title": "Anonymous team test",
+    "description": "Great for early, mid and late game!",
+    "id": "62799385833fa1541f11d88a"
+  },
+  {
+    "gameVersionPokedex": "firered-pokedex.json",
+    "gameVersionName": "FireRed",
+    "date": "2022-05-09T16:48:50.258Z",
+    "team": [
+      {
+        "pokemonID": 24,
+        "_id": "627945f238ecb530334d2b40"
+      },
+      {
+        "pokemonID": 45,
+        "_id": "627945f238ecb530334d2b41"
+      },
+      {
+        "pokemonID": 55,
+        "_id": "627945f238ecb530334d2b42"
+      },
+      {
+        "pokemonID": 59,
+        "_id": "627945f238ecb530334d2b43"
+      },
+      {
+        "pokemonID": 91,
+        "_id": "627945f238ecb530334d2b44"
+      },
+      {
+        "pokemonID": 123,
+        "_id": "627945f238ecb530334d2b45"
+      }
+    ],
+    "user": {
+      "username": "admin1",
+      "name": "Admin",
+      "id": "622f47e2fdaaa568c7516a37"
+    },
+    "title": "FireRed exclusive team",
+    "description": "only missing Electrabuzz",
+    "id": "627945f238ecb530334d2b3f"
+  }
+]
+```

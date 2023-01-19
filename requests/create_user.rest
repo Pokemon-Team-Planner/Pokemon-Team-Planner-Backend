@@ -2,7 +2,22 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "name": "Admin",
+  "username": "admin4",
+  "name": "Admin4",
   "password": "salainen_on"
 }
+
+### Response
+#### Status Code: 201 Created
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+
+```json
+{
+  "username": "admin4",
+  "name": "Admin4",
+  "teams": [],
+  "id": "63c9aa7fb4533ea108974e74"
+}
+```

@@ -15,3 +15,50 @@ Content-Type: application/json
   "title": "Anonymous team test",
   "description": "Great for early, mid and late game!"
 }
+
+### Response
+#### Status Code: 201 Created
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+```json
+{
+  "gameVersionPokedex": "pokedex-firered.json",
+  "gameVersionName": "FireRed",
+  "date": "2023-01-19T19:51:13.146Z",
+  "team": [
+    {
+      "pokemonID": 6,
+      "_id": "63c99f31b4533ea108974d0f"
+    },
+    {
+      "pokemonID": 53,
+      "_id": "63c99f31b4533ea108974d10"
+    },
+    {
+      "pokemonID": 24,
+      "_id": "63c99f31b4533ea108974d11"
+    },
+    {
+      "pokemonID": 87,
+      "_id": "63c99f31b4533ea108974d12"
+    },
+    {
+      "pokemonID": 98,
+      "_id": "63c99f31b4533ea108974d13"
+    },
+    {
+      "pokemonID": 134,
+      "_id": "63c99f31b4533ea108974d14"
+    }
+  ],
+  "user": {
+    "username": "anon",
+    "name": "Anonymous",
+    "id": "62797e31258e4a82d0186d54"
+  },
+  "title": "Anonymous team test",
+  "description": "Great for early, mid and late game!",
+  "id": "63c99f31b4533ea108974d0e"
+}
+```

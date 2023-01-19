@@ -1,1 +1,58 @@
 GET http://localhost:3001/api/users
+
+### Response
+#### Status Code: 200 OK
+#### Headers
+- Content-Type: application/json; charset=utf-8
+#### Body
+```json
+[
+  {
+    "username": "admin1",
+    "name": "Admin",
+    "teams": [
+      {
+        "gameVersionPokedex": "firered-pokedex.json",
+        "gameVersionName": "FireRed",
+        "date": "2022-05-09T16:48:50.258Z",
+        "team": [
+          {
+            "pokemonID": 24,
+            "_id": "627945f238ecb530334d2b40"
+          },
+          {
+            "pokemonID": 45,
+            "_id": "627945f238ecb530334d2b41"
+          },
+          {
+            "pokemonID": 55,
+            "_id": "627945f238ecb530334d2b42"
+          },
+          {
+            "pokemonID": 59,
+            "_id": "627945f238ecb530334d2b43"
+          },
+          {
+            "pokemonID": 91,
+            "_id": "627945f238ecb530334d2b44"
+          },
+          {
+            "pokemonID": 123,
+            "_id": "627945f238ecb530334d2b45"
+          }
+        ],
+        "title": "FireRed exclusive team",
+        "description": "only missing Electrabuzz",
+        "id": "627945f238ecb530334d2b3f"
+      }
+    ],
+    "id": "622f47e2fdaaa568c7516a37"
+  },
+  {
+    "username": "admin3",
+    "name": "Admin",
+    "teams": [],
+    "id": "62334960e4789c60a251165d"
+  }
+]
+```
