@@ -1,5 +1,7 @@
 # Backend for Pokemon Team Planner
 
+![pokemon team planner logo](readme-assets/pokemon-team-planner-logo-outlined.png)
+
 ## Node.js backend to serve pokemon data, API for pokemon teams and handle user authentication
 
 This is the backend for my Pokemon Team Planner app in which you can plan Pokemon teams for Pokemon games and share them online. You can share teams either anonymously or with your user account. It has restful API endpoints for pokemon teams and basic endpoints for user creation and login. It also serves some static JSON-data such as supported games and game specific pokedexes with all the pokemon data.
@@ -45,6 +47,10 @@ PORT=3001
 SECRET=mysecret #Change this to a random 512-bit string (64 characters)
 ```
 5. run `npm run dev` or `npm start`
+
+## Contributing
+
+For now this is a Full Stack course project of mine. Maybe in the future I could accept contributions. Feel free to send me ideas or feedback though! :)
 
 ## Known issues (work in progress)
 
