@@ -7,15 +7,15 @@
 This is the backend for my Pokemon Team Planner app in which you can plan Pokemon teams for Pokemon games and share them online. You can share teams either anonymously or with your user account. It has restful API endpoints for pokemon teams and basic endpoints for user creation and login. It also serves some static JSON-data such as supported games and game specific pokedexes with all the pokemon data.
 
 API endpoints (with example requests and responses)
-* [create_team_anonymous](requests\create_team_anonymous.rest)
-* [create_team](requests\create_team.rest)
-* [create_user](requests\create_user.rest)
-* [delete_team](requests\delete_team.rest)
-* [get_all_teams](requests\get_all_teams.rest)
-* [get_all_users](requests\get_all_users.rest)
-* [get_team](requests\get_team.rest)
-* [login](requests\login.rest)
-* [update_team](requests\update_team.rest)
+* [create_team_anonymous](requests/create_team_anonymous.rest)
+* [create_team](requests/create_team.rest)
+* [create_user](requests/create_user.rest)
+* [delete_team](requests/delete_team.rest)
+* [get_all_teams](requests/get_all_teams.rest)
+* [get_all_users](requests/get_all_users.rest)
+* [get_team](requests/get_team.rest)
+* [login](requests/login.rest)
+* [update_team](requests/update_team.rest)
 
 ## Flowchart
 
